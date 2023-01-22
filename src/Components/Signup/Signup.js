@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useState,useContext } from 'react';
+import { Firebase } from '../../firebase/Config';
 
 import Logo from '../../olx-logo.png';
+import { FirebaseContext } from '../../Store/FirebasContext';
 import './Signup.css';
 
 export default function Signup() {
-  return (
-    <div>
+  const [username,setUsername]=useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState(0);
+  const [password, setPassword] = useState('');
+  const handleSubmit=(e)=>{
+    e.preventDefault()
+    Firebase.auth().createUsreWithEmailAndPassword(email,password).then((result)=>{
+      result.user.updateProfile({displayName:username})
+    }
+  )}
+  const{Firebase}=useContext(FirebaseContext)
+    return (
+    <div onSubmit={handleSubmit}>
       <div className="signupParentDiv">
         <img width="200px" height="200px" src={Logo}></img>
         <form>
@@ -15,6 +28,8 @@ export default function Signup() {
             className="input"
             type="text"
             id="fname"
+            value={username}
+            onChange={(e)=>{setUsername(e.target.value)}}
             name="name"
             defaultValue="John"
           />
@@ -25,6 +40,8 @@ export default function Signup() {
             className="input"
             type="email"
             id="fname"
+            value={email}
+            onChange={(e)=>{setEmail(e.target.value)}}
             name="email"
             defaultValue="John"
           />
@@ -35,6 +52,8 @@ export default function Signup() {
             className="input"
             type="number"
             id="lname"
+            value={phone}
+            onChange={(e)=>{setPhone(e.target.value)}}
             name="phone"
             defaultValue="Doe"
           />
@@ -45,6 +64,8 @@ export default function Signup() {
             className="input"
             type="password"
             id="lname"
+            value={password}
+            onChange={(e)=>{setPassword(e.target.value)}}
             name="password"
             defaultValue="Doe"
           />
